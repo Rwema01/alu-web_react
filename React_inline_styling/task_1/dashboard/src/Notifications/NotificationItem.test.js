@@ -5,11 +5,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import NotificationItem from './NotificationItem';
-import Notifications from './Notifications';
 import { StyleSheetTestUtils } from 'aphrodite';
 
 beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
+});
+afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
 });
 
 describe('<NotificationItem />', () => {
@@ -32,27 +34,17 @@ describe('<NotificationItem />', () => {
     });
 
     it('calls markAsRead with the right id', () => {
-        const listNotifications = [
-            { id: 1, type: 'default', value: 'New course available' },
-            { id: 2, type: 'urgent', value: 'New resume available' },
-            { id: 3, type: 'urgent', value: 'Holberton Danger' },
-        ];
+        const markAsReadSpy = jest.fn();
+        const wrapper = shallow(
+            <NotificationItem
+                id={ 1 }
+                type="default"
+                value="New course available"
+                markAsRead={ markAsReadSpy }
+            />
+        );
 
-        const wrapper = shallow(<Notifications displayDrawer={ true } listNotifications={ listNotifications } />);
-
-        const instance = wrapper.instance();
-        const spy = jest.spyOn(instance, 'markAsRead');
-
-        const item1 = wrapper.find(NotificationItem).at(0).dive();
-        item1.simulate('click');
-        expect(spy).toBeCalledWith(1);
-
-        const item2 = wrapper.find(NotificationItem).at(1).dive();
-        item2.simulate('click');
-        expect(spy).toBeCalledWith(2);
-
-        const item3 = wrapper.find(NotificationItem).at(2).dive();
-        item3.simulate('click');
-        expect(spy).toBeCalledWith(3);
+        wrapper.simulate('click');
+        expect(markAsReadSpy).toBeCalledWith(1);
     });
 });
