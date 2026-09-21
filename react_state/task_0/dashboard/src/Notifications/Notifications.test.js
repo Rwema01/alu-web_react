@@ -101,6 +101,7 @@ describe('<Notifications />', () => {
                 displayDrawer={ true }
                 handleDisplayDrawer={ handleDisplayDrawer }
                 handleHideDrawer={ handleHideDrawer }
+                listNotifications={ listNotifications }
             />
         );
         wrapper.find('button').simulate('click');
