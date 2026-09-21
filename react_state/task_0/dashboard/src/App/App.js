@@ -15,6 +15,11 @@ import { getLatestNotification } from '../utils/utils';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      displayDrawer: false,
+    };
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
   }
 
@@ -25,6 +30,15 @@ class App extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  // Handle Notifications drawer
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
   }
 
   // Handle Log out
@@ -52,7 +66,12 @@ class App extends React.Component {
 
     return (
       <>
-        <Notifications displayDrawer={ false } listNotifications={ listNotifications } />
+        <Notifications
+          displayDrawer={ this.state.displayDrawer }
+          handleDisplayDrawer={ this.handleDisplayDrawer }
+          handleHideDrawer={ this.handleHideDrawer }
+          listNotifications={ listNotifications }
+        />
         <div className="App">
           <Header />
           { isLoggedIn ?
